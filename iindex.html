@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa Interativo - Destinos Encantadores do Sul</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Animate.css para efeitos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%);
+      color: #1e293b;
+      text-align: center;
+    }
+    header {
+      padding: 25px 10px;
+      background: linear-gradient(90deg, #2563eb, #4f46e5);
+      color: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.9em;
+      letter-spacing: 1px;
+    }
+    #map {
+      height: 90vh;
+      width: 100%;
+      animation: fadeInUp 1s ease-in-out;
+      border-radius: 0 0 20px 20px;
+      overflow: hidden;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .leaflet-popup-content b {
+      color: #1e3a8a;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌎 Destinos Encantadores do Sul do Brasil</h1>
+    <p>Explore as paisagens, vinhos, montanhas e o charme do Natal!</p>
+  </header>
+
+  <div id="map" class="animate__animated animate__fadeIn"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Inicializa o mapa
+    var map = L.map('map', {
+      zoomControl: true,
+      scrollWheelZoom: true
+    }).setView([-29.365, -50.875], 10);
+
+    // Camada base
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Ícones personalizados
+    const icons = {
+      cidade: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/535/535188.png', iconSize: [38, 38], iconAnchor: [19, 38] }),
+      natureza: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/616/616408.png', iconSize: [38, 38], iconAnchor: [19, 38] }),
+      natal: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/882/882704.png', iconSize: [38, 38], iconAnchor: [19, 38] }),
+      vinho: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/2909/2909765.png', iconSize: [38, 38], iconAnchor: [19, 38] }),
+      praia: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/861/861060.png', iconSize: [38, 38], iconAnchor: [19, 38] }),
+      parque: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize: [38, 38], iconAnchor: [19, 38] })
+    };
+
+    // Destinos com categorias
+    var destinos = [
+      { nome: "Centro de Gramado", coords: [-29.3784, -50.8739], desc: "O coração turístico da Serra Gaúcha, cheio de charme e gastronomia.", tipo: "cidade" },
+      { nome: "Lago Negro", coords: [-29.3822, -50.8615], desc: "Um dos cartões-postais mais famosos de Gramado, rodeado por pinheiros e flores.", tipo: "natureza" },
+      { nome: "Parque do Caracol - Canela", coords: [-29.3196, -50.8576], desc: "Lar da impressionante Cascata do Caracol, com 131 metros de altura.", tipo: "parque" },
+      { nome: "Mundo a Vapor", coords: [-29.3635, -50.8295], desc: "Parque temático que recria o universo das máquinas a vapor com miniaturas em movimento.", tipo: "parque" },
+      { nome: "Rua Coberta", coords: [-29.3787, -50.8762], desc: "Uma rua charmosa com cafés e eventos, ideal para um passeio romântico.", tipo: "cidade" },
+      { nome: "Aldeia do Papai Noel", coords: [-29.3798, -50.8752], desc: "A casa oficial do Bom Velhinho no Brasil, com neve artificial e decorações natalinas.", tipo: "natal" },
+      { nome: "Vale dos Vinhedos", coords: [-29.1183, -51.5788], desc: "Região encantadora de vinícolas e gastronomia, entre Bento Gonçalves e Garibaldi.", tipo: "vinho" },
+      { nome: "Praia de Torres", coords: [-29.3343, -49.7265], desc: "Uma das praias mais belas do Sul, com falésias e mar azul intenso.", tipo: "praia" }
+    ];
+
+    // Adiciona marcadores e animações
+    destinos.forEach(dest => {
+      const marker = L.marker(dest.coords, { icon: icons[dest.tipo] })
+        .addTo(map)
+        .bindPopup(`<b>${dest.nome}</b><br>${dest.desc}`);
+
+      marker.on('click', () => {
+        map.flyTo(dest.coords, 13, { duration: 1.5 }); // Zoom suave
+      });
+    });
+  </script>
+
+</body>
+</html>
